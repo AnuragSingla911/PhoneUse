@@ -29,6 +29,22 @@ public class UsageSharedPrefernceHelper {
 		editor.commit();
 	}
 
+	
+	public static void setCurrentSelectedTheme(Context context,
+			int color) {
+		SharedPreferences prefs = context.getSharedPreferences(PREFERNCE_NAME,
+				Context.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		editor.putInt("color", color);
+		editor.commit();
+	}
+	
+	  public static int getCurrentTheme(Context context) {
+	        SharedPreferences prefs = context.getSharedPreferences(
+	        		PREFERNCE_NAME, Context.MODE_PRIVATE);
+	        return prefs.getInt("color",0xff1ca8f4);
+	    }
+	
     public static long getTotalDurationAppInPref(Context context, String pkgName) {
         SharedPreferences prefs = context.getSharedPreferences(
                 PREF_NAME_ALERT_DURATION_INFO, Context.MODE_PRIVATE);

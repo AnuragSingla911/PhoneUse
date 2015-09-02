@@ -31,6 +31,10 @@ public class MusicListAdapter implements ExpandableListAdapter {
     private String mTotalDuration = null;
     private boolean isDetailFragmentAdapter = false;
     private boolean mIsYearMode;
+    
+    
+    
+    
 
     public void setPackageNameAndDuration(String pkgName, String totalDur, boolean isYearMode) {
         mTotalDuration = totalDur;
@@ -144,6 +148,8 @@ public class MusicListAdapter implements ExpandableListAdapter {
 		TextView text_right = (TextView) convertView.findViewById(R.id.text3);
 		ImageView image_view_app_icon = (ImageView) convertView
 				.findViewById(R.id.app_icon);
+		View divider = (View)convertView.findViewById(R.id.divider);
+		divider.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
 
         if (mIntervalMap != null) {
             image_view_app_icon.setVisibility(View.GONE);
@@ -265,17 +271,18 @@ public class MusicListAdapter implements ExpandableListAdapter {
             Utils.getScaledImageView(mContext, imageView);
         }
         TextView textview = (TextView) convertView.findViewById(R.id.group_title);
+        View divider = (View)convertView.findViewById(R.id.divider);
+        divider.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
         TextView totalDuration = (TextView) convertView.findViewById(R.id.group_total_duration);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.drop_icon);
         if ((!Utils.isTabletDevice(mContext) || !isDetailFragmentAdapter) && groupPosition == 0) {
             totalDuration.setVisibility(View.VISIBLE);
             textview.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.GONE);
-            textview.setTextColor(mContext.getResources().getColor(R.color.color_total_time_title));
+            textview.setTextColor(ColorPickerDialog.mCurrentThemeColor);
             textview.setTypeface(mBoldTypeface);
             textview.setText(mContext.getString(R.string.string_total_time_apps).toUpperCase());
-            totalDuration.setTextColor(mContext.getResources().getColor(
-                    R.color.color_total_time_title));
+            totalDuration.setTextColor(ColorPickerDialog.mCurrentThemeColor);
             totalDuration.setTypeface(mBoldTypeface);
             totalDuration.setText(mTotalDuration.toUpperCase());
             convertView.setFocusable(true);

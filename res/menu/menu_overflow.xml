@@ -13,5 +13,8 @@
     <item
         android:id="@+id/action_sort_by"
         android:title="@string/string_sort_by"/>
+    
+    <item android:id="@+id/action_change_theme"
+        android:title="@string/string_change_theme"/>
 
 </menu>

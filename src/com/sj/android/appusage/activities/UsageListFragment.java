@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -54,6 +55,7 @@ import com.sj.android.appusage.Utility.UsageInfo;
 import com.sj.android.appusage.Utility.UsageSharedPrefernceHelper;
 import com.sj.android.appusage.Utility.Utils;
 import com.sj.android.appusage.database.PhoneUsageDatabase;
+import com.sj.android.appusage.ui.widgets.ColorPickerDialog;
 import com.sj.android.appusage.ui.widgets.MusicListAdapter;
 import com.sj.android.appusage.ui.widgets.SlidingTabLayout;
 import com.sj.android.appusage.ui.widgets.UsageListAdapter;
@@ -83,6 +85,8 @@ public class UsageListFragment<AppData, MusicData> extends
      * the user when scrolling.
      */
     private SlidingTabLayout mSlidingTabLayout;
+    
+    private View mDividerLine;
 
     public HashMap<String, String> mLabelMap;
 
@@ -108,6 +112,13 @@ public class UsageListFragment<AppData, MusicData> extends
 	private String mAlertPackage = null;
 	public void setOnUsageItemClickListener(OnUsageItemClickListener listener){
 		mItemClickListener = listener;
+	}
+	
+	public void updateThemeColor(){
+		mDividerLine.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+		mSlidingTabLayout.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+		mPageAdapter.updateDividerColorForTab();
+	    mPageAdapter.notifyDataSetChanged();
 	}
 	
 	
@@ -184,6 +195,8 @@ public class UsageListFragment<AppData, MusicData> extends
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	
+    	Log.d("anurag","oncreate UsageListFragment");
         if (getActivity() != null && UsageSharedPrefernceHelper.isFilterMode(getActivity())) {
             mIsFilteredMap = true;
         }
@@ -192,6 +205,12 @@ public class UsageListFragment<AppData, MusicData> extends
             mAlertPackage = bundle.getString("package");
         }
         super.onCreate(savedInstanceState);
+    }
+    
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+    	Log.d("anurag","onActivityCreated UsageListFragment");
+    	super.onActivityCreated(savedInstanceState);
     }
 
     public int getViewPagerPage() {
@@ -220,9 +239,56 @@ public class UsageListFragment<AppData, MusicData> extends
     	this.cal1 = cal1;
     	this.cal2 = cal2;
     }
+    
+    @Override
+    public void onAttach(Activity activity) {
+    	Log.d("anurag","onAttach UsageListFragment");
+    	super.onAttach(activity);
+    }
+    
+    @Override
+    public void onStart() {
+    	Log.d("anurag","onStart UsageListFragment");
+    	super.onStart();
+    }
+    
+    @Override
+    public void onDetach() {
+    	Log.d("anurag","onDeatach UsageListFragment");
+    	super.onDetach();
+    }
+    @Override
+    public void onDestroy() {
+    	Log.d("anurag","onDestroy UsageListFragment");
+    	super.onDestroy();
+    }
+    
+    @Override
+    public void onDestroyView() {
+    	Log.d("anurag","onDestroyView UsageListFragment");
+    	super.onDestroyView();
+    }
+    
+    @Override
+    public void onPause() {
+    	Log.d("anurag","onPause UsageListFragment");
+    	super.onPause();
+    }
+    
+    @Override
+    public void onResume() {
+    	Log.d("anurag","onResume UsageListFragment");
+    	super.onResume();
+    }
 
     @Override
+    public void onStop() {
+    	Log.d("anurag","onStop UsageListFragment");
+    	super.onStop();
+    }
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	Log.d("anurag","oncreateView UsageListFragment");
         setHasOptionsMenu(true);
         mDatabase = new PhoneUsageDatabase(getActivity());
             getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.app_name));
@@ -262,6 +328,9 @@ public class UsageListFragment<AppData, MusicData> extends
 		// it's PagerAdapter set.
 		mSlidingTabLayout = (SlidingTabLayout) view
 				.findViewById(R.id.sliding_tabs);
+		mDividerLine = (View)view.findViewById(R.id.dividerLine);
+		mDividerLine.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+		mSlidingTabLayout.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
 		mSlidingTabLayout.setViewPager(mViewPager);
 		mSlidingTabLayout.setOnPageChangeListener(this);
 		// END_INCLUDE (setup_slidingtablayout)
@@ -345,6 +414,8 @@ public class UsageListFragment<AppData, MusicData> extends
 	class SamplePagerAdapter extends PagerAdapter implements OnItemSwiped,OnItemClickListener, OnChildClickListener,Comparator<Map.Entry<Long, UsageInfo>>{
 
 		String[] mList = new String[] { "Apps", "Media" };
+		
+		View mDualPaneDivider;
 
 		/**
 		 * @return the number of pages to display
@@ -485,6 +556,14 @@ public class UsageListFragment<AppData, MusicData> extends
 	        transaction.replace(R.id.usage_detail_fragment_layout, mDetailFragment);
 	        transaction.commit();
 	    }
+	    
+	    public void updateDividerColorForTab(){
+	    	if(mDualPaneDivider != null)
+	    	mDualPaneDivider.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+	    	if(mAppDataListAdapter != null){
+	    		mAppDataListAdapter.notifyDataSetChanged();
+	    	}
+	    }
 
 /*		private void initDetailFragment(HashMap<Long,UsageInfo> intervalMap, String applicationName) {
 	        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
@@ -526,6 +605,8 @@ public class UsageListFragment<AppData, MusicData> extends
 		    }else{
 		    	viewData = getActivity().getLayoutInflater().inflate(
 	                    R.layout.usage_list_tablet_layout, container, false);
+		    	mDualPaneDivider = viewData.findViewById(R.id.divider);
+		    	mDualPaneDivider.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
 		    	mDetailFragmentLayout = (FrameLayout)viewData.findViewById(R.id.usage_detail_fragment_layout);
 		    	mAppListLayout = (LinearLayout)viewData.findViewById(R.id.usage_parent_tab_layout);
 		    	mMusicListLayout = (LinearLayout)viewData.findViewById(R.id.music_parent_tab_layout);
@@ -534,6 +615,7 @@ public class UsageListFragment<AppData, MusicData> extends
 			View viewNoData = getActivity().getLayoutInflater().inflate(R.layout.layout_no_data_tracking_info, container, false);
 			TextView textViewNoDataStartTracking = (TextView) viewNoData.findViewById(R.id.textView_start_tracking_no_data_navigate);
 			TextView textViewNoData = (TextView) viewNoData.findViewById(R.id.textView_no_data_navigate);
+			
 			// Add the newly created View to the ViewPager
 
 			// Retrieve a TextView from the inflated View, and update it's text

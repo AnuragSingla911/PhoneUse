@@ -36,6 +36,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
@@ -51,7 +52,7 @@ import com.sj.android.appusage.R;
 import com.sj.android.appusage.activities.UsageListMainActivity;
 
 public class Utils {
-
+	
 	public static String TIME_FORMAT_HHMMSS = "hh:mm:ss";
 	private static final String LOG_TAG = Utils.class.getSimpleName();
 	public static String TIME_FORMAT_HH_HR_MM_MIN_SS_SEC = "hh hr mm min ss sec";

@@ -40,6 +40,9 @@ public class UsageListAdapter<Data> extends BaseAdapter {
 	public void setCurrentSelectedPos(int pos){
 		mCurrentSelectedItem = pos;
 	}
+	
+	
+	
     @SuppressWarnings("unchecked")
     public UsageListAdapter(Context context, Data data) throws Exception {
         mContext = context;
@@ -127,6 +130,8 @@ public class UsageListAdapter<Data> extends BaseAdapter {
             holder.text_middle = (TextView) convertView.findViewById(R.id.text2);
             holder.parent = (RelativeLayout) convertView.findViewById(R.id.parentLayout);
             holder.swipeText = (TextView) convertView.findViewById(R.id.text);
+            holder.divider = (View)convertView.findViewById(R.id.divider);
+            holder.rootView.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
 			holder.parent = (RelativeLayout) convertView
 					.findViewById(R.id.parentLayout);
 
@@ -136,7 +141,7 @@ public class UsageListAdapter<Data> extends BaseAdapter {
         }
 		holder.position = position;
 		holder.parent.setTag(holder);
-		
+		holder.divider.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
 		if (Utils.isTabletDevice(mContext)) {
 			if (mCurrentSelectedItem == position && position != 0) {
 				holder.parent
@@ -150,14 +155,12 @@ public class UsageListAdapter<Data> extends BaseAdapter {
             holder.text_dash.setVisibility(View.GONE);
             if (position == 0) {
                 holder.image_view_app_icon.setVisibility(View.GONE);
-                holder.text_left.setTextColor(mContext.getResources().getColor(
-                        R.color.color_total_time_title));
+                holder.text_left.setTextColor(ColorPickerDialog.mCurrentThemeColor);
                 holder.text_left.setTypeface(mBoldTypeface);
                 holder.text_left.setText(mContext.getString(R.string.string_total_time_apps).toUpperCase());
                 holder.text_right.setText(("" + Utils.getTimeFromSeconds(mMap.get(mKeys.get(position))))
                         .toUpperCase());
-                holder.text_right.setTextColor(mContext.getResources().getColor(
-                        R.color.color_total_time_title));
+                holder.text_right.setTextColor(ColorPickerDialog.mCurrentThemeColor);
                 holder.text_right.setTypeface(mBoldTypeface);
                 holder.parent.setFocusable(true);
                 holder.parent.setClickable(true);
@@ -186,6 +189,7 @@ public class UsageListAdapter<Data> extends BaseAdapter {
 	private class ViewHolder {
 		TextView text_left, text_right, text_middle, text_dash,swipeText;
 		ImageView image_view_app_icon;
+		View divider;
 		RelativeLayout parent;
 		FrameLayout rootView;
 		int position;

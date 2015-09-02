@@ -79,4 +79,10 @@
     <string name="string_usage_alert">Usage Alert</string>
     <string name="string_time_duration_exceeded">Time duration exceeded for</string>
         <string name="string_this_month">This Month</string>
+        <string name="string_change_theme">Theme</string>
+        <string name="string_blue">Blue</string>
+        <string name="string_red">Magenta</string>
+        <string name="string_green">Sea Green</string>
+        <string name="string_grey">Grey</string>
+        <string name="string_pink">Pink</string>
 </resources>

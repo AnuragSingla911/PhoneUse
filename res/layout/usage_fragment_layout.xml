@@ -11,6 +11,7 @@
           android:layout_height="wrap_content" />
 
     <View
+        android:id="@+id/dividerLine"
         android:layout_width="match_parent"
         android:background="@color/color_action_bar_background"
         android:layout_height="1dp"/>

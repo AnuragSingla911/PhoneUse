@@ -3,8 +3,10 @@ package com.sj.android.appusage.activities;
 import java.util.HashMap;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -85,21 +87,53 @@ public class UsageDetailListFragment extends Fragment implements View.OnClickLis
 	public void onCreate(Bundle savedInstanceState) {
 	    // TODO Auto-generated method stub
 	    super.onCreate(savedInstanceState);
-        
+	    Log.d("anurag","onCreate UsageDetailListFragment");
 	    if (!Utils.isTabletDevice(getActivity())) {
 	        initActionBar();
 	    }
 	}
 	
 	@Override
+	public void onDestroy() {
+		Log.d("anurag","onDestroy UsageDetailListFragment");
+		super.onDestroy();
+	}
+	
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-	    // TODO Auto-generated method stub
+		Log.d("anurag","onActivityCreated UsageDetailListFragment");
 	    super.onActivityCreated(savedInstanceState);
+	}
+	
+	@Override
+	public void onDestroyView() {
+		Log.d("anurag","onDestroyView UsageDetailListFragment");
+		super.onDestroyView();
+	}
+	
+	
+	@Override
+	public void onStop() {
+		Log.d("anurag","onStop UsageDetailListFragment");
+		super.onStop();
+	}
+	
+	@Override
+	public void onStart() {
+		Log.d("anurag","onStart UsageDetailListFragment");
+		super.onStart();
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		Log.d("anurag","onAttach UsageDetailListFragment");
+		super.onAttach(activity);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.d("anurag","onCreateView UsageDetailListFragment");
 		LinearLayout parentLayout = new LinearLayout(getActivity());
 		ExpandableListView list = new ExpandableListView(getActivity());
 		LinearLayout.LayoutParams params = new LayoutParams(

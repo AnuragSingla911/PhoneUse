@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.sj.android.appusage.R;
 import com.sj.android.appusage.Utility.Utils;
+import com.sj.android.appusage.ui.widgets.ColorPickerDialog;
 
 public class SettingsActivity extends Activity implements View.OnClickListener {
     
@@ -25,6 +27,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayShowHomeEnabled(false);
+		getActionBar().setBackgroundDrawable(new ColorDrawable(ColorPickerDialog.mCurrentThemeColor));
 		initActionBar();
 		 FragmentManager mFragmentManager = getFragmentManager();
          FragmentTransaction mFragmentTransaction = mFragmentManager

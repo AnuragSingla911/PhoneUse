@@ -16,6 +16,8 @@
 
 package com.sj.android.appusage.ui.widgets;
 
+import com.sj.android.appusage.Utility.Utils;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -183,6 +185,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
             getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
                     outValue, true);
             textView.setBackgroundResource(outValue.resourceId);
+//            textView.setBackgroundColor(Utils.mThemeColor);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {

@@ -38,6 +38,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -69,11 +70,12 @@ import com.sj.android.appusage.dialogs.MonthViewFragment.DateInterface;
 import com.sj.android.appusage.service.UsageTrackingService;
 import com.sj.android.appusage.service.UsageTrackingService.LocalBinder;
 import com.sj.android.appusage.service.UsageTrackingService.provideData;
+import com.sj.android.appusage.ui.widgets.ColorPickerDialog;
 import com.sj.android.appusage.R;
 
 public class UsageListMainActivity extends Activity implements View.OnClickListener, DateInterface,
         UsageListFragment.OnUsageItemClickListener, UsageDetailListFragment.OnDetachFromActivity,
-        Comparator<Map.Entry<Long, UsageInfo>>, OnMenuItemClickListener {
+        Comparator<Map.Entry<Long, UsageInfo>>, OnMenuItemClickListener ,ColorPickerDialog.ColorChangeObserver{
     private Context mContext;
     private MonthViewFragment startDateFragment;
     private Calendar cal1, cal2;
@@ -108,6 +110,7 @@ public class UsageListMainActivity extends Activity implements View.OnClickListe
     HashMap<String, ResolveInfo> mResolveInfo = null;
     private ArrayList<ResolveInfo> mList;
     private Intent mNotificationIntent = null;
+    private ColorPickerDialog mColorPicker = null;
     
     // Alert maps.
     private HashMap<String, Long> mAlertDurationMap;
@@ -329,8 +332,12 @@ public class UsageListMainActivity extends Activity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("anurag","onCreate UsageListMainActivity");
         setContentView(R.layout.usage_list_main_layout);
         getActionBar().setDisplayShowHomeEnabled(false);
+        mColorPicker = new ColorPickerDialog(this);
+        mColorPicker.registerColorChangeObserver(this);
+        getActionBar().setBackgroundDrawable(new ColorDrawable(ColorPickerDialog.mCurrentThemeColor));
         mContext = this;
         mShowList = new String[]{getString(R.string.string_Today),
         		getString(R.string.string_Weekly),getString(R.string.string_Monthly)
@@ -391,12 +398,19 @@ public class UsageListMainActivity extends Activity implements View.OnClickListe
         return TypedValue.complexToDimension(value.data, metrics);
     }
     
+    
     private void initFabTextView(){
     	mShowByOptionsToday = (TextView)findViewById(R.id.showByOptionsToday);
     	mShowByOptionsWeekly = (TextView)findViewById(R.id.showByOptionsWeekly);
     	mShowByOptionsMonthly = (TextView)findViewById(R.id.showByOptionsMonthly);
     	mShowByOptionsYearly = (TextView)findViewById(R.id.showByOptionsYearly);
     	mShowByOptionsCustom = (TextView)findViewById(R.id.showByOptionsCustom);
+    	
+    	mShowByOptionsCustom.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+    	mShowByOptionsYearly.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+    	mShowByOptionsMonthly.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+    	mShowByOptionsWeekly.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+    	mShowByOptionsToday.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
         
     	mShowByOptionsToday.setOnClickListener(this);
     	mShowByOptionsWeekly.setOnClickListener(this);
@@ -453,11 +467,15 @@ public class UsageListMainActivity extends Activity implements View.OnClickListe
     
     @Override
     public void onAttachFragment(Fragment fragment) {
+    	Log.d("anurag","onattachfragment :"+ fragment);
     	if(mContext!= null && !Utils.isTabletDevice(mContext) && fragment instanceof UsageDetailListFragment){
     		setFabButtonsVisibility(false);
     	}
     	super.onAttachFragment(fragment);
     }
+    
+    
+    
     
     private void setIntervalMapDetail(HashMap<Long, UsageInfo> intervalMap, String packageName) {
         mDetailFragment = new UsageDetailListFragment();
@@ -538,6 +556,20 @@ public class UsageListMainActivity extends Activity implements View.OnClickListe
         mList.addAll(mResolveInfo.values());
 
     }
+    
+    @Override
+    protected void onStart() {
+    	Log.d("anurag","onStart UsageListMainActivity");
+    	super.onStart();
+    }
+    
+    @Override
+    protected void onPause() {
+    	Log.d("anurag","onPause UsageListMainActivity");
+    	super.onPause();
+    }
+    
+
 
     
 
@@ -548,7 +580,7 @@ public class UsageListMainActivity extends Activity implements View.OnClickListe
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-
+        Log.d("anurag","onResume UsageListMainActivity");
         Log.v(LOG_TAG, "mainService onResume is: " + mMainService);
         loadDataTask dataTask = new loadDataTask(mContext);
         dataTask.execute();
@@ -574,6 +606,7 @@ public class UsageListMainActivity extends Activity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
+    	Log.d("anurag","onDestroy UsageListMainActivity");
         Log.v(LOG_TAG, "onDestroy activity"+mIsBound);
 
         // Unbind from service to prevent service connection leak.
@@ -708,12 +741,15 @@ public class UsageListMainActivity extends Activity implements View.OnClickListe
     
     @Override
     protected void onStop() {
+    	Log.d("anurag","onStop UsageListMainActivity");
     	if(mPopupMenu != null && isPopupMenuShowing){
     		mPopupMenu.dismiss();
     		isPopupMenuShowing = false;
     	}
     	super.onStop();
     }
+    
+    
 
     private void showPopup() {
     	
@@ -1273,9 +1309,31 @@ public class UsageListMainActivity extends Activity implements View.OnClickListe
             AlertDialog sortByDialog = sortByBuilder.create();
             sortByDialog.show();
             break;
+        case R.id.action_change_theme:
+			mColorPicker.show(this);
+        	break;
 
         }
 
         return false;
     }
+
+	@Override
+	public void notifyColorChange(int color) {
+		getActionBar().setBackgroundDrawable(
+				new ColorDrawable(ColorPickerDialog.mCurrentThemeColor));
+		mShowByOptionsCustom
+				.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+		mShowByOptionsYearly
+				.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+		mShowByOptionsMonthly
+				.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+		mShowByOptionsWeekly
+				.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+		mShowByOptionsToday
+				.setBackgroundColor(ColorPickerDialog.mCurrentThemeColor);
+		if(mUsageListFragment != null){
+			mUsageListFragment.updateThemeColor();
+		}
+	}
 }
